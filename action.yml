@@ -9,6 +9,10 @@ branding:
 
 # Define your inputs here.
 inputs:
+  package-manager:
+    description: "The package manager to be used (npm, yarn, pnpm)"
+    required: false
+    default: "npm"
   access-token:
     description: "A personal access token needed to push your site after it has been built."
     required: true

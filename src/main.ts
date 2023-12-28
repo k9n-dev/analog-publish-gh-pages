@@ -1,24 +1,37 @@
 import * as core from '@actions/core'
-import { wait } from './wait'
+import { install } from './install'
+import { PackageManager } from './types'
+import { build } from './build'
+import { deploy } from './deploy'
 
-/**
- * The main function for the action.
- * @returns {Promise<void>} Resolves when the action is complete.
- */
 export async function run(): Promise<void> {
   try {
-    const ms: string = core.getInput('milliseconds')
+    const packageManager: string = core.getInput('package-manager')
+    if (!packageManager || !['npm', 'yarn', 'pnpm'].includes(packageManager)) {
+      return core.setFailed(
+        'Package Manager must be either "npm", "yarn" or "pnpm". Please set a valid value by setting the `package-manager` input for this action.'
+      )
+    }
 
-    // Debug logs are only output if the `ACTIONS_STEP_DEBUG` secret is true
-    core.debug(`Waiting ${ms} milliseconds ...`)
+    const accessToken: string = core.getInput('access-token', {})
+    if (!accessToken) {
+      return core.setFailed(
+        'No personal access token found. Please provide one by setting the `access-token` input for this action.'
+      )
+    }
 
-    // Log the current timestamp, wait, then log the new timestamp
-    core.debug(new Date().toTimeString())
-    await wait(parseInt(ms, 10))
-    core.debug(new Date().toTimeString())
+    const installArgs = core.getInput('install-args')?.trim() || ''
+    const buildArgs = core.getInput('build-args')?.trim() || ''
+    const deployDir =
+      core.getInput('deploy-dir')?.trim() || 'dist/analog/public'
+    const deployArgs = core.getInput('deploy-args')?.trim() || '--no-silent'
 
-    // Set outputs for other workflow steps to use
-    core.setOutput('time', new Date().toTimeString())
+    await install(packageManager as PackageManager, installArgs)
+    await build(packageManager as PackageManager, buildArgs)
+    await deploy(deployDir, deployArgs)
+
+    console.log('Enjoy! ✨')
+    core.setOutput('success', true)
   } catch (error) {
     // Fail the workflow run if an error occurs
     if (error instanceof Error) core.setFailed(error.message)
