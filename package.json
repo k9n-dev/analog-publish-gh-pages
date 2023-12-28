@@ -1,16 +1,16 @@
 {
-  "name": "typescript-action",
+  "name": "analog-publish-gh-pages",
   "description": "GitHub Actions TypeScript template",
   "version": "0.0.0",
   "author": "",
   "private": true,
-  "homepage": "https://github.com/actions/typescript-action",
+  "homepage": "https://github.com/d-koppenhagen/analog-publish-gh-pages",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/actions/typescript-action.git"
+    "url": "git+https://github.com/d-koppenhagen/analog-publish-gh-pages.git"
   },
   "bugs": {
-    "url": "https://github.com/actions/typescript-action/issues"
+    "url": "https://github.com/d-koppenhagen/analog-publish-gh-pages/issues"
   },
   "keywords": [
     "actions",

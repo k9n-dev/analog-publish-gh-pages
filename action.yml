@@ -1,23 +1,33 @@
-name: 'The name of your action here'
-description: 'Provide a description here'
-author: 'Your name or organization here'
+name: 'Analog Publish Github Pages'
+description: 'Build a static Analog.js site and deploy it on Github Pages'
+author: 'Danny Koppenhagen <mail@k9n.dev>'
 
 # Add your action's branding here. This will appear on the GitHub Marketplace.
 branding:
   icon: 'heart'
-  color: 'red'
+  color: 'green'
 
 # Define your inputs here.
 inputs:
-  milliseconds:
-    description: 'Your input description here'
+  access-token:
+    description: "A personal access token needed to push your site after it has been built."
     required: true
-    default: '1000'
-
-# Define your outputs here.
-outputs:
-  time:
-    description: 'Your output description here'
+  install-args:
+    description: "Additional arguments that get passed to `npm ci` (e. g. `--legacy-peer-deps`)."
+    required: false
+    default: ""
+  build-args:
+    description: "Additional arguments that get passed to `npm run build`."
+    required: false
+    default: ""
+  deploy-dir:
+    description: "The path to the directory to deploy"
+    required: false
+    default: "dist/analog/public"
+  deploy-args:
+    description: "Additional arguments that get passed to `npx angular-cli-ghpages`."
+    required: false
+    default: "--no-silent"
 
 runs:
   using: node20
