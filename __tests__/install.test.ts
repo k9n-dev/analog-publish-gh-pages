@@ -4,22 +4,48 @@
 
 import { install } from '../src/install'
 import { expect } from '@jest/globals'
+import * as exec from '@actions/exec'
 
-describe.skip('wait.ts', () => {
-  it('throws an invalid number', async () => {
-    const input = parseInt('foo', 10)
-    expect(isNaN(input)).toBe(true)
+let execMock: jest.SpyInstance
 
-    await expect(install('npm')).rejects.toThrow('milliseconds not a number')
+describe('install.ts', () => {
+  beforeEach(() => {
+    jest.clearAllMocks()
+    execMock = jest.spyOn(exec, 'exec').mockImplementation()
   })
 
-  it('waits with a valid number', async () => {
-    const start = new Date()
+  it('installs with npm', async () => {
+    await install('npm')
+    expect(execMock).toHaveBeenCalledWith('npm ci')
+  })
+
+  it('installs with pnpm', async () => {
     await install('pnpm')
-    const end = new Date()
+    expect(execMock).toHaveBeenCalledWith('pnpm install --frozen-lockfile')
+  })
 
-    const delta = Math.abs(end.getTime() - start.getTime())
+  it('installs with yarn', async () => {
+    await install('yarn')
+    expect(execMock).toHaveBeenCalledWith('yarn install --frozen-lockfile')
+  })
 
-    expect(delta).toBeGreaterThan(450)
+  it('installs with custom args', async () => {
+    await install('npm', '--legacy-peer-deps')
+    expect(execMock).toHaveBeenCalledWith('npm ci --legacy-peer-deps')
+  })
+
+  it('joins custom args with default args', async () => {
+    await install('pnpm', '--legacy-peer-deps')
+    expect(execMock).toHaveBeenCalledWith('pnpm install --legacy-peer-deps --frozen-lockfile')
+  })
+
+  it('ignores empty string args', async () => {
+    await install('npm', '')
+    expect(execMock).toHaveBeenCalledWith('npm ci')
+  })
+
+  it('removes extra whitespace from args', async () => {
+    await install('pnpm', ' --legacy-peer-deps ')
+    expect(execMock).toHaveBeenCalledWith('pnpm install --legacy-peer-deps --frozen-lockfile')
   })
 })
