@@ -35,7 +35,7 @@ export async function run(): Promise<void> {
     core.endGroup()
 
     core.startGroup('Deploy')
-    await deploy(deployDir, deployArgs)
+    await deploy(accessToken, deployDir, deployArgs)
     core.endGroup()
 
     core.info('Enjoy! ✨')

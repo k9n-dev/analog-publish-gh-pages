@@ -8,6 +8,8 @@ let execMock: jest.SpyInstance
 
 const deployDir = '__tests__'
 
+process.env.GITHUB_REPOSITORY = 'https://github.com/my-org/my-repo'
+
 describe('deploy.ts', () => {
   beforeEach(() => {
     jest.clearAllMocks()
@@ -21,29 +23,29 @@ describe('deploy.ts', () => {
   })
 
   it('deploys the passed directory', async () => {
-    await deploy(deployDir)
+    await deploy('1234', deployDir)
     expect(execMock).toHaveBeenCalledWith(
-      `npx angular-cli-ghpages --dir="${deployDir}"`
+      `npx angular-cli-ghpages --repo="https://1234@github.com/https:/.git" --dir="${deployDir}"`
     )
   })
 
   it('deploys with deploy args', async () => {
-    await deploy(deployDir, '--no-silent')
+    await deploy('1234', deployDir, '--no-silent')
     expect(execMock).toHaveBeenCalledWith(
-      `npx angular-cli-ghpages --dir="${deployDir}" --no-silent`
+      `npx angular-cli-ghpages --repo="https://1234@github.com/https:/.git" --dir="${deployDir}" --no-silent`
     )
   })
 
   it('deploys with cname arg from file', async () => {
     writeFile('CNAME', 'example.org')
-    await deploy(deployDir)
+    await deploy('1234', deployDir)
     expect(execMock).toHaveBeenCalledWith(
-      `npx angular-cli-ghpages --dir="${deployDir}" --cname=example.org`
+      `npx angular-cli-ghpages --repo="https://1234@github.com/https:/.git" --dir="${deployDir}" --cname=example.org`
     )
   })
 
   it('creates a .nojekyll file in the target directory', async () => {
-    await deploy(deployDir)
+    await deploy('1234', deployDir)
     const noJekyllFile = await ioUtil.exists(`${deployDir}/.nojekyll`)
     expect(noJekyllFile).toBe(true)
   })

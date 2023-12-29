@@ -6,6 +6,7 @@ import * as core from '@actions/core'
 import * as github from '@actions/github'
 
 export async function deploy(
+  accessToken: string,
   targetDir: string,
   deployArguments = ''
 ): Promise<void> {
@@ -31,6 +32,9 @@ export async function deploy(
     writeFile(noJekyllPath, '')
   }
 
+  const repo = `${github.context.repo.owner}/${github.context.repo.repo}`
+  const repoURL = `https://${accessToken}@github.com/${repo}.git`
+
   await exec.exec(`git config user.name`, [github.context.actor])
   await exec.exec(`git config user.email`, [
     `${github.context.actor}@users.noreply.github.com`
@@ -38,7 +42,7 @@ export async function deploy(
 
   core.info(`Deploy static site using angular-cli-ghpages`)
   await exec.exec(
-    `npx angular-cli-ghpages --dir="${targetDir}"${cnameArg}${deployArgs}`
+    `npx angular-cli-ghpages --repo="${repoURL}" --dir="${targetDir}"${cnameArg}${deployArgs}`
   )
   core.info('Successfully deployed your site.')
 }

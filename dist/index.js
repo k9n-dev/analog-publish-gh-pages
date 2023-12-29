@@ -30221,7 +30221,7 @@ const utils_1 = __nccwpck_require__(1314);
 const path = __importStar(__nccwpck_require__(1017));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
-async function deploy(targetDir, deployArguments = '') {
+async function deploy(accessToken, targetDir, deployArguments = '') {
     let deployArgs = deployArguments;
     // Add dashes if a user passes args and doesn't have them.
     if (deployArgs !== '' && !deployArguments.startsWith('-- ')) {
@@ -30240,12 +30240,14 @@ async function deploy(targetDir, deployArguments = '') {
         core.info(`Creating .nojekyll file (${noJekyllPath})`);
         (0, utils_1.writeFile)(noJekyllPath, '');
     }
+    const repo = `${github.context.repo.owner}/${github.context.repo.repo}`;
+    const repoURL = `https://${accessToken}@github.com/${repo}.git`;
     await exec.exec(`git config user.name`, [github.context.actor]);
     await exec.exec(`git config user.email`, [
         `${github.context.actor}@users.noreply.github.com`
     ]);
     core.info(`Deploy static site using angular-cli-ghpages`);
-    await exec.exec(`npx angular-cli-ghpages --dir="${targetDir}"${cnameArg}${deployArgs}`);
+    await exec.exec(`npx angular-cli-ghpages --repo="${repoURL}" --dir="${targetDir}"${cnameArg}${deployArgs}`);
     core.info('Successfully deployed your site.');
 }
 exports.deploy = deploy;
@@ -30352,9 +30354,15 @@ async function run() {
         const buildArgs = core.getInput('build-args')?.trim() || '';
         const deployDir = core.getInput('deploy-dir')?.trim() || 'dist/analog/public';
         const deployArgs = core.getInput('deploy-args')?.trim() || '--no-silent';
+        core.startGroup('Install');
         await (0, install_1.install)(packageManager, installArgs);
+        core.endGroup();
+        core.startGroup('Build');
         await (0, build_1.build)(packageManager, buildArgs);
-        await (0, deploy_1.deploy)(deployDir, deployArgs);
+        core.endGroup();
+        core.startGroup('Deploy');
+        await (0, deploy_1.deploy)(accessToken, deployDir, deployArgs);
+        core.endGroup();
         core.info('Enjoy! ✨');
         core.setOutput('success', true);
     }
