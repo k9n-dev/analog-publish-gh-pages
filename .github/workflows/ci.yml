@@ -55,8 +55,6 @@ jobs:
         id: test-action
         uses: ./
         with:
-          milliseconds: 2000
-
-      - name: Print Output
-        id: output
-        run: echo "${{ steps.test-action.outputs.time }}"
+          access-token: ${{ secrets.ACCESS_TOKEN }}
+          install-args: '--legacy-peer-deps'
+          deploy-args: '--dry-run'
