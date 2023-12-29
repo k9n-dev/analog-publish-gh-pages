@@ -1,6 +1,5 @@
 # Analog Publish Github Pages
 
-[![GitHub Super-Linter](https://github.com/d-koppenhagen/analog-publish-gh-pages/actions/workflows/linter.yml/badge.svg)](https://github.com/super-linter/super-linter)
 ![CI](https://github.com/d-koppenhagen/analog-publish-gh-pages/actions/workflows/ci.yml/badge.svg)
 [![Check dist/](https://github.com/d-koppenhagen/analog-publish-gh-pages/actions/workflows/check-dist.yml/badge.svg)](https://github.com/d-koppenhagen/analog-publish-gh-pages/actions/workflows/check-dist.yml)
 [![CodeQL](https://github.com/d-koppenhagen/analog-publish-gh-pages/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/d-koppenhagen/analog-publish-gh-pages/actions/workflows/codeql-analysis.yml)
