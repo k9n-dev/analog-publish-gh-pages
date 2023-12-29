@@ -1,8 +1,8 @@
 # Analog Publish Github Pages
 
-![CI](https://github.com/d-koppenhagen/analog-publish-gh-pages/actions/workflows/ci.yml/badge.svg)
-[![Check dist/](https://github.com/d-koppenhagen/analog-publish-gh-pages/actions/workflows/check-dist.yml/badge.svg)](https://github.com/d-koppenhagen/analog-publish-gh-pages/actions/workflows/check-dist.yml)
-[![CodeQL](https://github.com/d-koppenhagen/analog-publish-gh-pages/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/d-koppenhagen/analog-publish-gh-pages/actions/workflows/codeql-analysis.yml)
+![CI](https://github.com/k9n-dev/analog-publish-gh-pages/actions/workflows/ci.yml/badge.svg)
+[![Check dist/](https://github.com/k9n-dev/analog-publish-gh-pages/actions/workflows/check-dist.yml/badge.svg)](https://github.com/k9n-dev/analog-publish-gh-pages/actions/workflows/check-dist.yml)
+[![CodeQL](https://github.com/k9n-dev/analog-publish-gh-pages/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/k9n-dev/analog-publish-gh-pages/actions/workflows/codeql-analysis.yml)
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
 
 Build a static [Analog.js](https://analogjs.org/) site and deploy it on Github Pages.
@@ -27,7 +27,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-      - uses: d-koppenhagen/analog-publish-gh-pages@v0.2.0
+      - uses: k9n-dev/analog-publish-gh-pages@v0.2.0
         with:
           # Required: token to access / deploy on Github Pages
           access-token: ${{ secrets.ACCESS_TOKEN }}

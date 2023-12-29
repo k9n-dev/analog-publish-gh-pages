@@ -154,7 +154,7 @@ steps:
 ```
 
 For example workflow runs, check out the
-[Actions tab](https://github.com/d-koppenhagen/analog-publish-gh-pages/actions)! :rocket:
+[Actions tab](https://github.com/k9n-dev/analog-publish-gh-pages/actions)! :rocket:
 
 ## Usage
 
