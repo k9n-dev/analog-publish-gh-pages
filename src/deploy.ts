@@ -1,6 +1,6 @@
 import * as exec from '@actions/exec'
 import * as ioUtil from '@actions/io/lib/io-util'
-import { readFile, writeFile } from './utils'
+import { writeFile } from './utils'
 import * as path from 'path'
 import * as core from '@actions/core'
 import * as github from '@actions/github'
