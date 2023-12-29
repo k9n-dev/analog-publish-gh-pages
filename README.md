@@ -10,6 +10,8 @@ Pages.
 
 ## Versions and Compatibility
 
+Tested with Node `20`, Angular `^17.0.0` and AnalogJS `1.0.0-beta.1`.
+
 ## Usage
 
 ```yaml
