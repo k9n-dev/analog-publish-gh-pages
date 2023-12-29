@@ -30,7 +30,7 @@ export async function run(): Promise<void> {
     await build(packageManager as PackageManager, buildArgs)
     await deploy(deployDir, deployArgs)
 
-    console.log('Enjoy! ✨')
+    core.info('Enjoy! ✨')
     core.setOutput('success', true)
   } catch (error) {
     // Fail the workflow run if an error occurs

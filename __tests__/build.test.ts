@@ -1,7 +1,3 @@
-/**
- * Unit tests for src/wait.ts
- */
-
 import { build } from '../src/build'
 import { expect } from '@jest/globals'
 import * as exec from '@actions/exec'
@@ -21,11 +17,15 @@ describe('build.ts', () => {
 
   it('builds with build args', async () => {
     await build('npm', '--configuration=development')
-    expect(execMock).toHaveBeenCalledWith('npm run build -- --configuration=development')
+    expect(execMock).toHaveBeenCalledWith(
+      'npm run build -- --configuration=development'
+    )
   })
 
   it('removes extra "--"', async () => {
     await build('npm', '-- -c=development --dry-run')
-    expect(execMock).toHaveBeenCalledWith('npm run build -- -c=development --dry-run')
+    expect(execMock).toHaveBeenCalledWith(
+      'npm run build -- -c=development --dry-run'
+    )
   })
 })

@@ -1,5 +1,6 @@
 import { PackageManager } from './types'
 import * as exec from '@actions/exec'
+import * as core from '@actions/core'
 
 export async function install(
   packageManager: PackageManager,
@@ -7,15 +8,17 @@ export async function install(
 ): Promise<void> {
   let installCommand = 'ci'
   let installArgsWhitespaceStripped = installArgs.trim()
-  let installOptions = installArgsWhitespaceStripped ? [installArgsWhitespaceStripped] : []
+  let installOptions = installArgsWhitespaceStripped
+    ? [installArgsWhitespaceStripped]
+    : []
   if (packageManager !== 'npm') {
     installOptions.push('--frozen-lockfile')
     installCommand = 'install'
   }
 
-  console.log(`Installing your site's dependencies using ${packageManager}.`)
+  core.info(`Installing your site's dependencies using ${packageManager}.`)
   await exec.exec(
     `${packageManager} ${installCommand} ${installOptions.join(' ')}`.trim()
   )
-  console.log('Finished installing dependencies.')
+  core.info('Finished installing dependencies.')
 }

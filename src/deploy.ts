@@ -1,22 +1,38 @@
-import { PackageManager } from './types'
 import * as exec from '@actions/exec'
 import * as ioUtil from '@actions/io/lib/io-util'
-import * as fs from 'fs'
+import { readFile, writeFile } from './utils'
+import * as path from 'path'
+import * as core from '@actions/core'
 
 export async function deploy(
   targetDir: string,
-  deployArgs = ''
+  deployArguments = ''
 ): Promise<void> {
+  let deployArgs = deployArguments
+  // Add dashes if a user passes args and doesn't have them.
+  if (deployArgs !== '' && !deployArguments.startsWith('-- ')) {
+    deployArgs = `${deployArguments}`
+  }
+  deployArgs = deployArgs ? ` ${deployArgs}` : ''
+
   let cnameArg = ''
   const cnameFile = await ioUtil.exists('CNAME')
   if (cnameFile) {
-    const cname = fs.readFileSync('CNAME', 'utf8')
-    cnameArg = `--cname=${cname}`
+    const cname = readFile('CNAME')
+    cnameArg = ` --cname=${cname}`
   }
 
-  console.log(`Deploy static site using angular-cli-ghpages`)
+  const noJekyllPath = path.join(path.resolve(targetDir), '.nojekyll')
+
+  const noJekyllFile = await ioUtil.exists(noJekyllPath)
+  if (!noJekyllFile) {
+    core.info(`Creating .nojekyll file (${noJekyllPath})`)
+    writeFile(noJekyllPath, '')
+  }
+
+  core.info(`Deploy static site using angular-cli-ghpages`)
   await exec.exec(
-    `npx angular-cli-ghpages --dir="${targetDir}" ${cnameArg} ${deployArgs}`
+    `npx angular-cli-ghpages --dir="${targetDir}"${cnameArg}${deployArgs}`
   )
-  console.log('Successfully deployed your site.')
+  core.info('Successfully deployed your site.')
 }

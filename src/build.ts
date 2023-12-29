@@ -1,5 +1,6 @@
 import { PackageManager } from './types'
 import * as exec from '@actions/exec'
+import * as core from '@actions/core'
 
 export async function build(
   packageManager: PackageManager,
@@ -11,8 +12,8 @@ export async function build(
     buildArgs = `-- ${buildArgs}`
   }
 
-  console.log('Ready to build your Analog site!')
-  console.log(`Building with: ${packageManager} run build ${buildArgs}`)
+  core.info('Ready to build your Analog site!')
+  core.info(`Building with: ${packageManager} run build ${buildArgs}`)
   await exec.exec(`${packageManager} run build ${buildArgs}`.trim())
-  console.log('Finished building your site.')
+  core.info('Finished building your site.')
 }

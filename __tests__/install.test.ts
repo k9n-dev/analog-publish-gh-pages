@@ -1,7 +1,3 @@
-/**
- * Unit tests for src/wait.ts
- */
-
 import { install } from '../src/install'
 import { expect } from '@jest/globals'
 import * as exec from '@actions/exec'
@@ -36,7 +32,9 @@ describe('install.ts', () => {
 
   it('joins custom args with default args', async () => {
     await install('pnpm', '--legacy-peer-deps')
-    expect(execMock).toHaveBeenCalledWith('pnpm install --legacy-peer-deps --frozen-lockfile')
+    expect(execMock).toHaveBeenCalledWith(
+      'pnpm install --legacy-peer-deps --frozen-lockfile'
+    )
   })
 
   it('ignores empty string args', async () => {
@@ -46,6 +44,8 @@ describe('install.ts', () => {
 
   it('removes extra whitespace from args', async () => {
     await install('pnpm', ' --legacy-peer-deps ')
-    expect(execMock).toHaveBeenCalledWith('pnpm install --legacy-peer-deps --frozen-lockfile')
+    expect(execMock).toHaveBeenCalledWith(
+      'pnpm install --legacy-peer-deps --frozen-lockfile'
+    )
   })
 })
