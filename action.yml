@@ -6,30 +6,30 @@ branding:
   color: green
 inputs:
   package-manager:
-    description: The package manager to be used (npm, yarn, pnpm)
+    description: The package manager to be used (`npm`, `yarn`, `pnpm`).
     required: false
     default: npm
   access-token:
-    description: A personal access token needed to push your site after it has been built.
+    description: A personal access token needed to deploy your site after it has been built.
     required: true
   install-args:
-    description: Additional arguments that get passed to `npm ci` (e. g. `--legacy-peer-deps`).
+    description: Additional arguments that get passed to the install command of the used package manager (e. g. `--legacy-peer-deps`).
     required: false
     default: ""
   build-args:
-    description: Additional arguments that get passed to `npm run build`.
+    description: Additional arguments that get passed to `build` script of your `package.json` file.
     required: false
     default: ""
   deploy-dir:
-    description: The path to the directory to deploy
+    description: The path to the directory to deploy.
     required: false
     default: dist/analog/public
   deploy-branch:
-    description: The branch where the static site should be deployed
+    description: The branch where the static site should be deployed.
     required: false
     default: gh-pages
   dry-run:
-    description: Don't actually deploy
+    description: Don't actually deploy if truthy.
     required: false
     default: "false"
 runs:

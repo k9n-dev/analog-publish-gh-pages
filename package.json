@@ -25,16 +25,17 @@
   },
   "scripts": {
     "build": "mkdir -p dist/analog/public && echo echo \"<!DOCTYPE html><html><head><title>Analog Publish GitHub Pages Demo Page</title></head><body><h1>Analog Publish GitHub Pages</h1><p>Last deployment from ${GITHUB_REF}</p></body></html>\" > dist/analog/public/index.html",
-    "bundle": "npm run format:write && npm run package",
+    "bundle": "npm run docs:generate-inputs && npm run format:write && npm run package",
     "ci-test": "jest",
     "coverage": "make-coverage-badge --output-path ./badges/coverage.svg",
+    "docs:generate-inputs": "node script/generate-doc-table.mjs && npx prettier --write ./README.md",
     "format:write": "prettier --write **/*.ts",
     "format:check": "prettier --check **/*.ts",
     "lint": "npx eslint . -c ./.github/linters/.eslintrc.yml",
     "package": "ncc build src/index.ts --license licenses.txt",
     "package:watch": "npm run package -- --watch",
     "test": "jest",
-    "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package",
+    "all": "npm run docs:generate-inputs && npm run format:write && npm run lint && npm run test && npm run coverage && npm run package",
     "release": "npm run all && sh script/release",
     "prepare": "husky install"
   },
@@ -84,12 +85,13 @@
     "eslint-plugin-jest": "^27.6.0",
     "eslint-plugin-jsonc": "^2.11.2",
     "eslint-plugin-prettier": "^5.1.2",
+    "husky": "^8.0.0",
     "jest": "^29.7.0",
+    "js-yaml": "^4.1.0",
     "make-coverage-badge": "^1.2.0",
     "prettier": "^3.1.1",
     "prettier-eslint": "^16.2.0",
     "ts-jest": "^29.1.1",
-    "typescript": "^5.3.3",
-    "husky": "^8.0.0"
+    "typescript": "^5.3.3"
   }
 }

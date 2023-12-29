@@ -2,4 +2,4 @@
 . "$(dirname -- "$0")/_/husky.sh"
 
 npm run bundle
-git add dist/*
+git add dist/* README.md
