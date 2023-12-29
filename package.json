@@ -35,7 +35,8 @@
     "package:watch": "npm run package -- --watch",
     "test": "jest",
     "all": "npm run format:write && npm run lint && npm run test && npm run coverage && npm run package",
-    "release": "npm run all && sh script/release"
+    "release": "npm run all && sh script/release",
+    "prepare": "husky install"
   },
   "license": "MIT",
   "jest": {
@@ -88,6 +89,7 @@
     "prettier": "^3.1.1",
     "prettier-eslint": "^16.2.0",
     "ts-jest": "^29.1.1",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "husky": "^8.0.0"
   }
 }
