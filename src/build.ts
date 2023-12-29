@@ -13,6 +13,6 @@ export async function build(
 
   console.log('Ready to build your Analog site!')
   console.log(`Building with: ${packageManager} run build ${buildArgs}`)
-  await exec.exec(`${packageManager} run build ${buildArgs}`.trim(), [])
+  await exec.exec(`${packageManager} run build ${buildArgs}`.trim())
   console.log('Finished building your site.')
 }
