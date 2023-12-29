@@ -27,7 +27,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-      - uses: analog-publish-gh-pages@v0.1.0
+      - uses: d-koppenhagen/analog-publish-gh-pages@v0.2.0
         with:
           # Required: token to access / deploy on Github Pages
           access-token: ${{ secrets.ACCESS_TOKEN }}

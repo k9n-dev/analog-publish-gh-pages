@@ -3,6 +3,7 @@ import * as ioUtil from '@actions/io/lib/io-util'
 import { readFile, writeFile } from './utils'
 import * as path from 'path'
 import * as core from '@actions/core'
+import * as github from '@actions/github'
 
 export async function deploy(
   targetDir: string,
@@ -29,6 +30,11 @@ export async function deploy(
     core.info(`Creating .nojekyll file (${noJekyllPath})`)
     writeFile(noJekyllPath, '')
   }
+
+  await exec.exec(`git config user.name`, [github.context.actor])
+  await exec.exec(`git config user.email`, [
+    `${github.context.actor}@users.noreply.github.com`
+  ])
 
   core.info(`Deploy static site using angular-cli-ghpages`)
   await exec.exec(
