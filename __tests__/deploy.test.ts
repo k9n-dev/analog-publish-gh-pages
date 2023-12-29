@@ -26,14 +26,9 @@ describe('deploy.ts', () => {
   it('deploys', async () => {
     await deploy('1234', deployDir)
     expect(execMock).toHaveBeenNthCalledWith(
-      6,
+      7,
       'git push',
-      [
-        '-f',
-        'origin',
-        'https://1234@github.com/my-org/my-repo.git',
-        'main:gh-pages'
-      ],
+      ['-f', 'https://1234@github.com/my-org/my-repo.git', 'main:gh-pages'],
       { cwd: '__tests__' }
     )
   })

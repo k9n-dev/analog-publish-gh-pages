@@ -30247,7 +30247,8 @@ async function deploy(accessToken, targetDir, deployBranch = 'gh-pages', dryRun 
     core.info('Ready to deploy your static site!');
     core.info(`Deploying to repo: ${repo} and branch: ${deployBranch}`);
     core.info('You can configure the deploy branch by setting the `deploy-branch` input for this action.');
-    await exec.exec(`git init`, [], { cwd: targetDir });
+    await exec.exec(`git config`, ['--global', 'init.defaultBranch', 'main']);
+    await exec.exec(`git init`, ['-b', 'main'], { cwd: targetDir });
     await exec.exec(`git config user.name`, [github.context.actor], {
         cwd: targetDir
     });
@@ -30261,12 +30262,7 @@ async function deploy(accessToken, targetDir, deployBranch = 'gh-pages', dryRun 
     ], {
         cwd: targetDir
     });
-    const gitPushArgs = [
-        '-f',
-        'origin',
-        repoURL,
-        `${currentBranch}:${deployBranch}`
-    ];
+    const gitPushArgs = ['-f', repoURL, `${currentBranch}:${deployBranch}`];
     if (dryRun) {
         gitPushArgs.push('--dry-run');
         core.info("dry-run set, It won't actually deploy!");
