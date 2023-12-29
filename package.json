@@ -24,7 +24,7 @@
     "node": ">=20"
   },
   "scripts": {
-    "build": "mkdir -p dist/analog/public && echo echo \"<!DOCTYPE html><html><head><title>Analog Publish Github Pages Demo Page</title></head><body><h1>Analog Publish Github Pages</h1><p>Last deployment from ${GITHUB_REF}</p></body></html>\" > dist/analog/public/index.html",
+    "build": "mkdir -p dist/analog/public && echo echo \"<!DOCTYPE html><html><head><title>Analog Publish GitHub Pages Demo Page</title></head><body><h1>Analog Publish GitHub Pages</h1><p>Last deployment from ${GITHUB_REF}</p></body></html>\" > dist/analog/public/index.html",
     "bundle": "npm run format:write && npm run package",
     "ci-test": "jest",
     "coverage": "make-coverage-badge --output-path ./badges/coverage.svg",

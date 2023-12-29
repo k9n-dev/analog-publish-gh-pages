@@ -30258,7 +30258,7 @@ async function deploy(accessToken, targetDir, deployBranch = 'gh-pages', dryRun 
     await exec.exec(`git add`, ['.'], { cwd: targetDir });
     await exec.exec(`git commit`, [
         '-m',
-        `deployed via Analog Publish Github Pages 🚀 for ${github.context.sha}`
+        `deployed via Analog Publish GitHub Pages 🚀 for ${github.context.sha}`
     ], {
         cwd: targetDir
     });

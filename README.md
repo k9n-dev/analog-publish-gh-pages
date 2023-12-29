@@ -1,11 +1,11 @@
-# Analog Publish Github Pages
+# Analog Publish GitHub Pages
 
 ![CI](https://github.com/k9n-dev/analog-publish-gh-pages/actions/workflows/ci.yml/badge.svg)
 [![Check dist/](https://github.com/k9n-dev/analog-publish-gh-pages/actions/workflows/check-dist.yml/badge.svg)](https://github.com/k9n-dev/analog-publish-gh-pages/actions/workflows/check-dist.yml)
 [![CodeQL](https://github.com/k9n-dev/analog-publish-gh-pages/actions/workflows/codeql-analysis.yml/badge.svg)](https://github.com/k9n-dev/analog-publish-gh-pages/actions/workflows/codeql-analysis.yml)
 [![Coverage](./badges/coverage.svg)](./badges/coverage.svg)
 
-Build a static [Analog.js](https://analogjs.org/) site and deploy it on Github Pages.
+Build a static [AnalogJS](https://analogjs.org/) site and deploy it on GitHub Pages.
 
 ## Versions and Compatibility
 
@@ -29,7 +29,7 @@ jobs:
           node-version: '20.x'
       - uses: k9n-dev/analog-publish-gh-pages@v0.2.0
         with:
-          # Required: token to access / deploy on Github Pages
+          # Required: token to access / deploy on GitHub Pages
           access-token: ${{ secrets.ACCESS_TOKEN }}
           # Optional: arguments passed to `npm ci`
           install-args: "--legacy-peer-deps"
@@ -64,8 +64,8 @@ example.com
 
 ### `.nojekyll` file
 
-Analog.js creates files starting with an underscore (`_`) during the build process.
-By default Github Pages assumes a Jekyll project is being published.
+AnalogJS creates files starting with an underscore (`_`) during the build process.
+By default GitHub Pages assumes a Jekyll project is being published.
 This assumption comes with the fact, all files starting with `_` are being ignored.
 To fix this, the actions adds a `.nojekyll` file to the destination directory and places it in the root on the `gh-pages` branch.
 
