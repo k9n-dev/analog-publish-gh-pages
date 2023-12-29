@@ -1,36 +1,42 @@
 import * as core from '@actions/core'
 import * as main from '../src/main'
 
-// Mock the action's main function
 const runMock = jest.spyOn(main, 'run')
-
-// Other utilities
-const timeRegex = /^\d{2}:\d{2}:\d{2}/
-
-// Mock the GitHub Actions core library
-let debugMock: jest.SpyInstance
-let errorMock: jest.SpyInstance
-let getInputMock: jest.SpyInstance
 let setFailedMock: jest.SpyInstance
-let setOutputMock: jest.SpyInstance
+let getInputMock: jest.SpyInstance
 
-describe.skip('action', () => {
+describe('action', () => {
   beforeEach(() => {
     jest.clearAllMocks()
-
-    debugMock = jest.spyOn(core, 'debug').mockImplementation()
-    errorMock = jest.spyOn(core, 'error').mockImplementation()
-    getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
     setFailedMock = jest.spyOn(core, 'setFailed').mockImplementation()
-    setOutputMock = jest.spyOn(core, 'setOutput').mockImplementation()
+    getInputMock = jest.spyOn(core, 'getInput').mockImplementation()
   })
 
-  it('sets the time output', async () => {
-    // Set the action's inputs as return values from core.getInput()
+  it('sets the input values', async () => {
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
-        case 'milliseconds':
-          return '500'
+        case 'package-manager':
+          return 'pnpm'
+        case 'access-token':
+          return '1234'
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+    expect(runMock).toHaveReturned()
+    expect(getInputMock).toHaveNthReturnedWith(1, "pnpm")
+    expect(getInputMock).toHaveNthReturnedWith(2, "1234")
+  })
+
+  it('sets a failed status when package manager is not set', async () => {
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'package-manager':
+          return ''
+        case 'access-token':
+          return '1234'
         default:
           return ''
       }
@@ -39,43 +45,30 @@ describe.skip('action', () => {
     await main.run()
     expect(runMock).toHaveReturned()
 
-    // Verify that all of the core library functions were called correctly
-    expect(debugMock).toHaveBeenNthCalledWith(1, 'Waiting 500 milliseconds ...')
-    expect(debugMock).toHaveBeenNthCalledWith(
-      2,
-      expect.stringMatching(timeRegex)
-    )
-    expect(debugMock).toHaveBeenNthCalledWith(
-      3,
-      expect.stringMatching(timeRegex)
-    )
-    expect(setOutputMock).toHaveBeenNthCalledWith(
-      1,
-      'time',
-      expect.stringMatching(timeRegex)
-    )
-    expect(errorMock).not.toHaveBeenCalled()
-  })
-
-  it('sets a failed status', async () => {
-    // Set the action's inputs as return values from core.getInput()
-    getInputMock.mockImplementation((name: string): string => {
-      switch (name) {
-        case 'milliseconds':
-          return 'this is not a number'
-        default:
-          return ''
-      }
-    })
-
-    await main.run()
-    expect(runMock).toHaveReturned()
-
-    // Verify that all of the core library functions were called correctly
     expect(setFailedMock).toHaveBeenNthCalledWith(
       1,
-      'milliseconds not a number'
+      'Package Manager must be either \"npm\", \"yarn\" or \"pnpm\". Please set a valid value by setting the `package-manager` input for this action.'
     )
-    expect(errorMock).not.toHaveBeenCalled()
+  })
+
+  it('sets a failed status when package manager is not set', async () => {
+    getInputMock.mockImplementation((name: string): string => {
+      switch (name) {
+        case 'package-manager':
+          return 'npm'
+        case 'access-token':
+          return ''
+        default:
+          return ''
+      }
+    })
+
+    await main.run()
+    expect(runMock).toHaveReturned()
+
+    expect(setFailedMock).toHaveBeenNthCalledWith(
+      1,
+      'No personal access token found. Please provide one by setting the `access-token` input for this action.'
+    )
   })
 })
