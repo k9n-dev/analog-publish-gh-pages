@@ -26,9 +26,17 @@ export async function run(): Promise<void> {
       core.getInput('deploy-dir')?.trim() || 'dist/analog/public'
     const deployArgs = core.getInput('deploy-args')?.trim() || '--no-silent'
 
+    core.startGroup('Install')
     await install(packageManager as PackageManager, installArgs)
+    core.endGroup()
+
+    core.startGroup('Build')
     await build(packageManager as PackageManager, buildArgs)
+    core.endGroup()
+
+    core.startGroup('Deploy')
     await deploy(deployDir, deployArgs)
+    core.endGroup()
 
     core.info('Enjoy! ✨')
     core.setOutput('success', true)
