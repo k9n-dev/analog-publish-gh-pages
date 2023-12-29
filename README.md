@@ -27,7 +27,7 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '20.x'
-      - uses: k9n-dev/analog-publish-gh-pages@v0.2.0
+      - uses: k9n-dev/analog-publish-gh-pages@v1.0.0
         with:
           # Required: token to access / deploy on GitHub Pages
           access-token: ${{ secrets.ACCESS_TOKEN }}
@@ -38,7 +38,7 @@ jobs:
           # Optional: the directory after build process to deploy (defaults to `dist/analog/public`)
           deploy-dir: "dist/analog/public"
           # Optional: a specific branch where the static site should be deployed (defaults to `gh-pages`)
-          deploy-branch: "gh-pages" # important: --dry-run won't actually deploy the site!
+          deploy-branch: "gh-pages" # important: --dry-run (see option below) won't actually deploy the site!
           # Optional: prevent an actual deployment (e. g. for running in branch pipelines)
           dry-run: true
 ```
