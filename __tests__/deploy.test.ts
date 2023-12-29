@@ -23,14 +23,14 @@ describe('deploy.ts', () => {
   it('deploys the passed directory', async () => {
     await deploy(deployDir)
     expect(execMock).toHaveBeenCalledWith(
-      `npx angular-cli-ghpages --dir=\"${deployDir}\"`
+      `npx angular-cli-ghpages --dir="${deployDir}"`
     )
   })
 
   it('deploys with deploy args', async () => {
     await deploy(deployDir, '--no-silent')
     expect(execMock).toHaveBeenCalledWith(
-      `npx angular-cli-ghpages --dir=\"${deployDir}\" --no-silent`
+      `npx angular-cli-ghpages --dir="${deployDir}" --no-silent`
     )
   })
 
@@ -38,7 +38,7 @@ describe('deploy.ts', () => {
     writeFile('CNAME', 'example.org')
     await deploy(deployDir)
     expect(execMock).toHaveBeenCalledWith(
-      `npx angular-cli-ghpages --dir=\"${deployDir}\" --cname=example.org`
+      `npx angular-cli-ghpages --dir="${deployDir}" --cname=example.org`
     )
   })
 

@@ -26,8 +26,8 @@ describe('action', () => {
 
     await main.run()
     expect(runMock).toHaveReturned()
-    expect(getInputMock).toHaveNthReturnedWith(1, "pnpm")
-    expect(getInputMock).toHaveNthReturnedWith(2, "1234")
+    expect(getInputMock).toHaveNthReturnedWith(1, 'pnpm')
+    expect(getInputMock).toHaveNthReturnedWith(2, '1234')
   })
 
   it('sets a failed status when package manager is not set', async () => {
@@ -47,11 +47,11 @@ describe('action', () => {
 
     expect(setFailedMock).toHaveBeenNthCalledWith(
       1,
-      'Package Manager must be either \"npm\", \"yarn\" or \"pnpm\". Please set a valid value by setting the `package-manager` input for this action.'
+      'Package Manager must be either "npm", "yarn" or "pnpm". Please set a valid value by setting the `package-manager` input for this action.'
     )
   })
 
-  it('sets a failed status when package manager is not set', async () => {
+  it('sets a failed status when access token is not set', async () => {
     getInputMock.mockImplementation((name: string): string => {
       switch (name) {
         case 'package-manager':

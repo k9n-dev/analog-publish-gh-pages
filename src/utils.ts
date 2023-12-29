@@ -13,13 +13,13 @@ export function readFile(filePath: string): string {
   return fs.readFileSync(resolvedPath, 'utf8')
 }
 
-export function writeFile(filePath: string, data: string) {
+export function writeFile(filePath: string, data: string): void {
   const resolvedPath = path.resolve(filePath)
   core.debug(`Writing file: ${resolvedPath}`)
   return fs.writeFileSync(resolvedPath, data)
 }
 
-export function removeFileIfExists(filePath: string) {
+export function removeFileIfExists(filePath: string): void {
   const resolvedPath = path.resolve(filePath)
   if (fs.existsSync(resolvedPath)) {
     core.debug(`Removing file: ${resolvedPath}`)

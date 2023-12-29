@@ -4098,8 +4098,8 @@ const exec = __importStar(__nccwpck_require__(1514));
 const core = __importStar(__nccwpck_require__(2186));
 async function install(packageManager, installArgs = '') {
     let installCommand = 'ci';
-    let installArgsWhitespaceStripped = installArgs.trim();
-    let installOptions = installArgsWhitespaceStripped
+    const installArgsWhitespaceStripped = installArgs.trim();
+    const installOptions = installArgsWhitespaceStripped
         ? [installArgsWhitespaceStripped]
         : [];
     if (packageManager !== 'npm') {

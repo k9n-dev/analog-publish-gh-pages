@@ -7,8 +7,8 @@ export async function install(
   installArgs = ''
 ): Promise<void> {
   let installCommand = 'ci'
-  let installArgsWhitespaceStripped = installArgs.trim()
-  let installOptions = installArgsWhitespaceStripped
+  const installArgsWhitespaceStripped = installArgs.trim()
+  const installOptions = installArgsWhitespaceStripped
     ? [installArgsWhitespaceStripped]
     : []
   if (packageManager !== 'npm') {
