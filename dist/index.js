@@ -30221,18 +30221,20 @@ const utils_1 = __nccwpck_require__(1314);
 const path = __importStar(__nccwpck_require__(1017));
 const core = __importStar(__nccwpck_require__(2186));
 const github = __importStar(__nccwpck_require__(5438));
-async function deploy(accessToken, targetDir, deployArguments = '') {
-    let deployArgs = deployArguments;
-    // Add dashes if a user passes args and doesn't have them.
-    if (deployArgs !== '' && !deployArguments.startsWith('-- ')) {
-        deployArgs = `${deployArguments}`;
+const io = __importStar(__nccwpck_require__(7436));
+async function deploy(accessToken, targetDir, deployBranch = 'gh-pages', dryRun = false) {
+    const currentBranch = github.context.ref?.replace('refs/heads/', '') || 'main';
+    if (currentBranch === deployBranch) {
+        core.info(`Triggered by branch used to deploy: ${github.context.ref}.`);
+        core.info('Nothing to deploy.');
+        return;
     }
-    deployArgs = deployArgs ? ` ${deployArgs}` : '';
-    let cnameArg = '';
-    const cnameFile = await ioUtil.exists('CNAME');
-    if (cnameFile) {
-        const cname = (0, utils_1.readFile)('CNAME');
-        cnameArg = ` --cname=${cname}`;
+    const cnameExistsInRoot = await ioUtil.exists('./CNAME');
+    const cnameExistsInTargetDir = await ioUtil.exists(path.join(path.resolve(targetDir), 'CNAME'));
+    if (cnameExistsInRoot && !cnameExistsInTargetDir) {
+        core.info('Copying CNAME over from root directory.');
+        await io.cp('./CNAME', `${targetDir}/CNAME`, { force: true });
+        core.info(`Finished copying CNAME to ${targetDir}.`);
     }
     const noJekyllPath = path.join(path.resolve(targetDir), '.nojekyll');
     const noJekyllFile = await ioUtil.exists(noJekyllPath);
@@ -30242,13 +30244,32 @@ async function deploy(accessToken, targetDir, deployArguments = '') {
     }
     const repo = `${github.context.repo.owner}/${github.context.repo.repo}`;
     const repoURL = `https://${accessToken}@github.com/${repo}.git`;
-    await exec.exec(`git config user.name`, [github.context.actor]);
-    await exec.exec(`git config user.email`, [
-        `${github.context.actor}@users.noreply.github.com`
-    ]);
-    core.info(`Deploy static site using angular-cli-ghpages`);
-    await exec.exec(`npx angular-cli-ghpages --repo="${repoURL}" --dir="${targetDir}"${cnameArg}${deployArgs}`);
-    core.info('Successfully deployed your site.');
+    core.info('Ready to deploy your static site!');
+    core.info(`Deploying to repo: ${repo} and branch: ${deployBranch}`);
+    core.info('You can configure the deploy branch by setting the `deploy-branch` input for this action.');
+    await exec.exec(`git init`, [], { cwd: targetDir });
+    await exec.exec(`git config user.name`, [github.context.actor], {
+        cwd: targetDir
+    });
+    await exec.exec(`git config user.email`, [`${github.context.actor}@users.noreply.github.com`], {
+        cwd: targetDir
+    });
+    await exec.exec(`git add`, ['.'], { cwd: targetDir });
+    await exec.exec(`git commit`, [
+        '-m',
+        `deployed via Analog Publish Github Pages 🚀 for ${github.context.sha}`
+    ], {
+        cwd: targetDir
+    });
+    const gitPushArgs = ['-f', repoURL, `${currentBranch}:${deployBranch}`];
+    if (dryRun) {
+        gitPushArgs.push('--dry-run');
+        core.info("dry-run set, It won't actually deploy!");
+    }
+    await exec.exec(`git push`, gitPushArgs, {
+        cwd: targetDir
+    });
+    core.info('Finished deploying your site. 🚀');
 }
 exports.deploy = deploy;
 
@@ -30353,7 +30374,9 @@ async function run() {
         const installArgs = core.getInput('install-args')?.trim() || '';
         const buildArgs = core.getInput('build-args')?.trim() || '';
         const deployDir = core.getInput('deploy-dir')?.trim() || 'dist/analog/public';
-        const deployArgs = core.getInput('deploy-args')?.trim() || '--no-silent';
+        const deployBranch = core.getInput('deploy-branch')?.trim() || 'gh-pages';
+        const dryRunRaw = core.getInput('dry-run')?.trim();
+        const dryRun = !!(dryRunRaw && dryRunRaw !== 'false');
         core.startGroup('Install');
         await (0, install_1.install)(packageManager, installArgs);
         core.endGroup();
@@ -30361,7 +30384,7 @@ async function run() {
         await (0, build_1.build)(packageManager, buildArgs);
         core.endGroup();
         core.startGroup('Deploy');
-        await (0, deploy_1.deploy)(accessToken, deployDir, deployArgs);
+        await (0, deploy_1.deploy)(accessToken, deployDir, deployBranch, dryRun);
         core.endGroup();
         core.info('Enjoy! ✨');
         core.setOutput('success', true);

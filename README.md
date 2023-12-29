@@ -37,8 +37,10 @@ jobs:
           build-args: ""
           # Optional: the directory after build process to deploy (defaults to `dist/analog/public`)
           deploy-dir: "dist/analog/public"
-          # Optional: arguments passed to `npx angular-cli-ghpages`
-          deploy-args: "--dry-run" # important: --dry-run won't actually deploy the site!
+          # Optional: a specific branch where the static site should be deployed (defaults to `gh-pages`)
+          deploy-branch: "gh-pages" # important: --dry-run won't actually deploy the site!
+          # Optional: prevent an actual deployment (e. g. for running in branch pipelines)
+          dry-run: true
 ```
 
 ## Assumptions

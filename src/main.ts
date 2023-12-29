@@ -24,7 +24,9 @@ export async function run(): Promise<void> {
     const buildArgs = core.getInput('build-args')?.trim() || ''
     const deployDir =
       core.getInput('deploy-dir')?.trim() || 'dist/analog/public'
-    const deployArgs = core.getInput('deploy-args')?.trim() || '--no-silent'
+    const deployBranch = core.getInput('deploy-branch')?.trim() || 'gh-pages'
+    const dryRunRaw = core.getInput('dry-run')?.trim()
+    const dryRun = !!(dryRunRaw && dryRunRaw !== 'false')
 
     core.startGroup('Install')
     await install(packageManager as PackageManager, installArgs)
@@ -35,7 +37,7 @@ export async function run(): Promise<void> {
     core.endGroup()
 
     core.startGroup('Deploy')
-    await deploy(accessToken, deployDir, deployArgs)
+    await deploy(accessToken, deployDir, deployBranch, dryRun)
     core.endGroup()
 
     core.info('Enjoy! ✨')

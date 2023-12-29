@@ -19,29 +19,25 @@ describe('deploy.ts', () => {
   // cleanup temp files
   afterEach(() => {
     removeFileIfExists(`${deployDir}/.nojekyll`)
-    removeFileIfExists('CNAME')
+    removeFileIfExists(`${deployDir}/CNAME`)
+    removeFileIfExists(`CNAME`)
   })
 
-  it('deploys the passed directory', async () => {
+  it('deploys', async () => {
     await deploy('1234', deployDir)
-    expect(execMock).toHaveBeenCalledWith(
-      `npx angular-cli-ghpages --repo="https://1234@github.com/https:/.git" --dir="${deployDir}"`
+    expect(execMock).toHaveBeenNthCalledWith(
+      6,
+      'git push',
+      ['-f', 'https://1234@github.com/https:/.git', 'main:gh-pages'],
+      { cwd: '__tests__' }
     )
   })
 
-  it('deploys with deploy args', async () => {
-    await deploy('1234', deployDir, '--no-silent')
-    expect(execMock).toHaveBeenCalledWith(
-      `npx angular-cli-ghpages --repo="https://1234@github.com/https:/.git" --dir="${deployDir}" --no-silent`
-    )
-  })
-
-  it('deploys with cname arg from file', async () => {
-    writeFile('CNAME', 'example.org')
+  it('creates a CNAME file in the target directory', async () => {
+    writeFile('CNAME', '')
     await deploy('1234', deployDir)
-    expect(execMock).toHaveBeenCalledWith(
-      `npx angular-cli-ghpages --repo="https://1234@github.com/https:/.git" --dir="${deployDir}" --cname=example.org`
-    )
+    const CNAMEFile = await ioUtil.exists(`${deployDir}/CNAME`)
+    expect(CNAMEFile).toBe(true)
   })
 
   it('creates a .nojekyll file in the target directory', async () => {

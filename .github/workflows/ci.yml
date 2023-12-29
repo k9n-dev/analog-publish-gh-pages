@@ -57,4 +57,5 @@ jobs:
         with:
           access-token: ${{ secrets.ACCESS_TOKEN }}
           install-args: '--legacy-peer-deps'
-          deploy-args: '--dry-run'
+          deploy-branch: 'gh-pages'
+          # dry-run: true
