@@ -8,7 +8,7 @@ let execMock: jest.SpyInstance
 
 const deployDir = '__tests__'
 
-process.env.GITHUB_REPOSITORY = 'https://github.com/my-org/my-repo'
+process.env.GITHUB_REPOSITORY = 'my-org/my-repo'
 
 describe('deploy.ts', () => {
   beforeEach(() => {
@@ -28,7 +28,12 @@ describe('deploy.ts', () => {
     expect(execMock).toHaveBeenNthCalledWith(
       6,
       'git push',
-      ['-f', 'https://1234@github.com/https:/.git', 'main:gh-pages'],
+      [
+        '-f',
+        'origin',
+        'https://1234@github.com/my-org/my-repo.git',
+        'main:gh-pages'
+      ],
       { cwd: '__tests__' }
     )
   })

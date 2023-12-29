@@ -30261,7 +30261,12 @@ async function deploy(accessToken, targetDir, deployBranch = 'gh-pages', dryRun 
     ], {
         cwd: targetDir
     });
-    const gitPushArgs = ['-f', repoURL, `${currentBranch}:${deployBranch}`];
+    const gitPushArgs = [
+        '-f',
+        'origin',
+        repoURL,
+        `${currentBranch}:${deployBranch}`
+    ];
     if (dryRun) {
         gitPushArgs.push('--dry-run');
         core.info("dry-run set, It won't actually deploy!");

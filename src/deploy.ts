@@ -66,7 +66,12 @@ export async function deploy(
     }
   )
 
-  const gitPushArgs = ['-f', repoURL, `${currentBranch}:${deployBranch}`]
+  const gitPushArgs = [
+    '-f',
+    'origin',
+    repoURL,
+    `${currentBranch}:${deployBranch}`
+  ]
 
   if (dryRun) {
     gitPushArgs.push('--dry-run')
